@@ -3,18 +3,405 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>ahk4918 - Developer Portfolio</title>
+    <meta name="description" content="ahk4918's projects: EarthMC GUI, Microbit tools, and other public repos.">
+    <title>ahk4918 | Projects</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #0b0f14;
+        --bg-soft: #111720;
+        --panel: rgba(17, 23, 32, 0.9);
+        --panel-alt: rgba(13, 18, 25, 0.94);
+        --text: #eef2f7;
+        --muted: #9aa7b6;
+        --accent: #8dd6b7;
+        --accent-2: #8ab4ff;
+        --border: rgba(255, 255, 255, 0.09);
+        --shadow: 0 20px 60px rgba(0, 0, 0, 0.32);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        color: var(--text);
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+        background:
+          radial-gradient(circle at 18% 12%, rgba(124, 58, 237, 0.28), transparent 22%),
+          radial-gradient(circle at 84% 16%, rgba(37, 99, 235, 0.24), transparent 24%),
+          radial-gradient(circle at 50% 92%, rgba(217, 119, 6, 0.18), transparent 26%),
+          linear-gradient(135deg, #08111e 0%, #10243e 48%, #0d151f 100%);
+      }
+
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        background-image: linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+        background-size: 44px 44px;
+        opacity: 0.25;
+      }
+
+      main {
+        width: min(1040px, calc(100% - 28px));
+        margin: 0 auto;
+        padding: 28px 0 48px;
+      }
+
+      .hero,
+      .section {
+        border: 1px solid var(--border);
+        background: linear-gradient(180deg, rgba(17, 23, 32, 0.96), rgba(11, 16, 24, 0.92));
+        box-shadow: var(--shadow);
+        backdrop-filter: blur(14px);
+      }
+
+      .hero {
+        padding: 28px;
+        border-radius: 24px;
+      }
+
+      .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: var(--accent);
+        font-size: 0.82rem;
+        font-weight: 800;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+      }
+
+      .eyebrow::before {
+        content: "";
+        width: 8px;
+        height: 8px;
+        border-radius: 999px;
+        background: currentColor;
+      }
+
+      h1,
+      h2,
+      h3,
+      p {
+        margin: 0;
+      }
+
+      h1 {
+        margin-top: 16px;
+        max-width: 10ch;
+        font-size: clamp(2.6rem, 7vw, 5.4rem);
+        line-height: 0.92;
+        letter-spacing: -0.07em;
+      }
+
+      .lead {
+        margin-top: 16px;
+        max-width: 60ch;
+        color: var(--muted);
+        font-size: 1.04rem;
+        line-height: 1.75;
+      }
+
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 22px;
+      }
+
+      .button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 44px;
+        padding: 0 16px;
+        border-radius: 999px;
+        border: 1px solid transparent;
+        color: var(--text);
+        text-decoration: none;
+        font-weight: 700;
+      }
+
+      .button.primary {
+        color: #081017;
+        background: linear-gradient(135deg, var(--accent), #d4f8e9);
+      }
+
+      .button.secondary {
+        border-color: var(--border);
+        background: rgba(255, 255, 255, 0.03);
+      }
+
+      .section {
+        margin-top: 22px;
+        padding: 22px;
+        border-radius: 22px;
+      }
+
+      .section-header {
+        display: flex;
+        align-items: end;
+        justify-content: space-between;
+        gap: 16px;
+        margin-bottom: 16px;
+      }
+
+      .section-header p {
+        max-width: 55ch;
+        color: var(--muted);
+        line-height: 1.65;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: 1.35fr 1fr 1fr;
+        gap: 14px;
+      }
+
+      .card {
+        padding: 20px;
+        border-radius: 18px;
+        border: 1px solid var(--border);
+        background: linear-gradient(180deg, rgba(17, 23, 32, 0.96), rgba(14, 19, 28, 0.94));
+      }
+
+      .card.featured {
+        min-height: 290px;
+        background:
+          radial-gradient(circle at top right, rgba(124, 58, 237, 0.24), transparent 30%),
+          linear-gradient(180deg, rgba(19, 30, 56, 0.98), rgba(11, 16, 24, 0.95));
+      }
+
+      .tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 10px;
+        border-radius: 999px;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        color: var(--muted);
+        font-size: 0.76rem;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+
+      .tag.highlight {
+        border-color: rgba(141, 214, 183, 0.2);
+        color: #d6f7ea;
+        background: rgba(124, 58, 237, 0.18);
+      }
+
+      .card h3 {
+        margin-top: 14px;
+        font-size: 1.18rem;
+      }
+
+      .card p {
+        margin-top: 10px;
+        color: var(--muted);
+        line-height: 1.65;
+      }
+
+      .links {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 16px;
+      }
+
+      .mini-link {
+        color: var(--text);
+        text-decoration: none;
+        font-weight: 700;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.24);
+        padding-bottom: 2px;
+      }
+
+      .mini-link:hover {
+        color: var(--accent-2);
+      }
+
+      .card:nth-child(3n + 2) {
+        background: linear-gradient(180deg, rgba(22, 34, 58, 0.98), rgba(13, 18, 28, 0.96));
+      }
+
+      .card:nth-child(3n + 3) {
+        background: linear-gradient(180deg, rgba(35, 27, 58, 0.98), rgba(13, 18, 28, 0.96));
+      }
+
+      .list {
+        display: grid;
+          gap: 12px;
+      }
+
+      .list-item {
+        padding: 16px;
+        border-radius: 16px;
+        border: 1px solid var(--border);
+        background: rgba(255, 255, 255, 0.02);
+      }
+
+      .list-item strong {
+        display: block;
+        font-size: 1rem;
+      }
+
+      .list-item span {
+        display: block;
+        margin-top: 8px;
+        color: var(--muted);
+        line-height: 1.6;
+      }
+
+      .list-item .mini-link {
+        display: inline-block;
+        margin-top: 10px;
+      }
+
+      footer {
+        padding: 20px 6px 0;
+        color: var(--muted);
+        text-align: center;
+        font-size: 0.94rem;
+      }
+
+      @media (max-width: 900px) {
+        .grid {
+          grid-template-columns: 1fr;
+        }
+
+        .card.featured {
+          min-height: 0;
+        }
+      }
+
+      @media (max-width: 640px) {
+        main {
+          width: min(100% - 18px, 1040px);
+          padding-top: 10px;
+        }
+
+        .hero,
+        .section {
+          padding: 18px;
+          border-radius: 18px;
+        }
+
+        .section-header {
+          flex-direction: column;
+          align-items: start;
+        }
+
+        h1 {
+          max-width: 100%;
+          font-size: clamp(2.3rem, 14vw, 4rem);
+        }
+      }
+    </style>
   </head>
   <body>
     <main>
-      <h1>Hello, I’m ahk4918</h1>
-      <p>I am a developer building projects and sharing them here.</p>
+      <section class="hero">
+        <div class="eyebrow">ahk4918</div>
+        <h1>Simple work. Solid output.</h1>
+        <p class="lead">Simple projects that solve real problems.</p>
+        <div class="actions">
+          <a class="button primary" href="#projects">View projects</a>
+          <a class="button secondary" href="https://github.com/ahk4918" target="_blank" rel="noopener noreferrer">GitHub profile</a>
+        </div>
+      </section>
 
-      <h2>Projects</h2>
-      <ul>
-        <li><a href="https://github.com/ahk4918" target="_blank" rel="noopener noreferrer">GitHub Profile (opens in new tab)</a></li>
-        <li><a href="https://github.com/ahk4918/ahk4918.github.io" target="_blank" rel="noopener noreferrer">This Website (opens in new tab)</a></li>
-      </ul>
+      <section class="section" id="projects">
+        <div class="section-header">
+          <div>
+            <div class="eyebrow">Projects</div>
+            <h2>Simple projects that solve problems</h2>
+          </div>
+          <p>Short, useful, and direct.</p>
+        </div>
+
+        <div class="grid">
+          <article class="card featured">
+            <span class="tag highlight">Featured site</span>
+            <h3>EarthMC GUI</h3>
+            <p>Browse EarthMC faster.</p>
+            <p>Site and repo.</p>
+            <div class="links">
+              <a class="mini-link" href="https://ahk4918.github.io/earthmc-gui/" target="_blank" rel="noopener noreferrer">Open site</a>
+              <a class="mini-link" href="https://github.com/ahk4918/earthmc-gui" target="_blank" rel="noopener noreferrer">Open repo</a>
+            </div>
+          </article>
+
+          <article class="card">
+            <span class="tag">Repo</span>
+            <h3>Microbit-devices-commands</h3>
+            <p>Control a micro:bit.</p>
+            <div class="links">
+              <a class="mini-link" href="https://github.com/ahk4918/Microbit-devices-commands" target="_blank" rel="noopener noreferrer">Open repo</a>
+            </div>
+          </article>
+
+          <article class="card">
+            <span class="tag">Repo</span>
+            <h3>Microbit-Compiler</h3>
+            <p>Build and test code.</p>
+            <div class="links">
+              <a class="mini-link" href="https://github.com/ahk4918/Microbit-Compiler" target="_blank" rel="noopener noreferrer">Open repo</a>
+            </div>
+          </article>
+
+          <article class="card">
+            <span class="tag">Repo</span>
+            <h3>ahk4918.github.io</h3>
+            <p>This portfolio site.</p>
+            <div class="links">
+              <a class="mini-link" href="https://github.com/ahk4918/ahk4918.github.io" target="_blank" rel="noopener noreferrer">Open repo</a>
+            </div>
+          </article>
+
+          <article class="card">
+            <span class="tag">Repo</span>
+            <h3>terminalExecutepy</h3>
+            <p>Run commands faster.</p>
+            <div class="links">
+              <a class="mini-link" href="https://github.com/ahk4918/terminalExecutepy" target="_blank" rel="noopener noreferrer">Open repo</a>
+            </div>
+          </article>
+
+          <article class="card">
+            <span class="tag">Repo</span>
+            <h3>Robotics-Physics</h3>
+            <p>Physics and robotics work.</p>
+            <div class="links">
+              <a class="mini-link" href="https://github.com/ahk4918/Robotics-Physics" target="_blank" rel="noopener noreferrer">Open repo</a>
+            </div>
+          </article>
+
+          <article class="card" id="more-projects">
+            <span class="tag">More</span>
+            <h3>All public repos</h3>
+            <p>More problem solvers later.</p>
+            <div class="links">
+              <a class="mini-link" href="https://github.com/ahk4918?tab=repositories" target="_blank" rel="noopener noreferrer">Browse everything</a>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <footer>
+        Simple projects that solve problems.
+      </footer>
     </main>
   </body>
 </html>
